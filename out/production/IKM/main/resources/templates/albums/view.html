@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Просмотр: ' + ${album.title}">Просмотр альбома</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Просмотр альбома</h1>
+        <p class="subtitle">Детальная информация</p>
+    </header>
+
+    <div class="view-container">
+        <div class="album-card">
+            <div class="album-header">
+                <h2 th:text="${album.title}">Album Title</h2>
+                <span class="genre-badge-large" th:text="${album.genre}">Genre</span>
+            </div>
+
+            <div class="album-details">
+                <div class="detail-row">
+                    <span class="detail-label">ID:</span>
+                    <span class="detail-value" th:text="${album.id}">1</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Исполнитель:</span>
+                    <span class="detail-value artist-name" th:text="${album.artist}">Artist Name</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Год выпуска:</span>
+                    <span class="detail-value" th:text="${album.releaseYear}">2020</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Жанр:</span>
+                    <span class="detail-value" th:text="${album.genre}">Rock</span>
+                </div>
+
+                <div class="detail-row" th:if="${album.trackCount != null}">
+                    <span class="detail-label">Количество треков:</span>
+                    <span class="detail-value" th:text="${album.trackCount}">12</span>
+                </div>
+
+                <div class="detail-row description-row" th:if="${album.description != null and !#strings.isEmpty(album.description)}">
+                    <span class="detail-label">Описание:</span>
+                    <p class="detail-value description-text" th:text="${album.description}">
+                    </p>
+                </div>
+            </div>
+
+            <div class="album-actions">
+                <a th:href="@{/albums/edit/{id}(id=${album.id})}" class="btn btn-primary">
+                    Редактировать
+                </a>
+                <a th:href="@{/albums/delete/{id}(id=${album.id})}"
+                   class="btn btn-delete"
+                   onclick="return confirm('Вы уверены, что хотите удалить этот альбом?')">
+                    Удалить
+                </a>
+                <a th:href="@{/albums}" class="btn btn-secondary">
+                    Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

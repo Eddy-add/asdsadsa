@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDocumentation>
+  <project>
+    <name>Movie Catalog</name>
+    <description>Каталог фильмов (REST API + статические страницы HTML/JS).</description>
+    <stack>
+      <item>Java</item>
+      <item>Spring Boot</item>
+      <item>Spring Web (REST)</item>
+      <item>Spring Data JPA + Hibernate</item>
+      <item>PostgreSQL</item>
+      <item>HTML/CSS/JavaScript</item>
+    </stack>
+  </project>
+
+  <database>
+    <dbms>PostgreSQL</dbms>
+    <tables>
+      <table name="films">
+        <columns>
+          <column name="id" type="BIGINT" pk="true" generated="true"/>
+          <column name="title" type="VARCHAR"/>
+          <column name="release_year" type="INT"/>
+          <column name="runtime_min" type="INT"/>
+          <column name="description" type="TEXT"/>
+        </columns>
+      </table>
+
+      <table name="genres">
+        <columns>
+          <column name="id" type="BIGINT" pk="true" generated="true"/>
+          <column name="name" type="VARCHAR"/>
+        </columns>
+      </table>
+
+      <table name="film_genres">
+        <columns>
+          <column name="film_id" type="BIGINT" pk="true" fk="films.id"/>
+          <column name="genre_id" type="BIGINT" pk="true" fk="genres.id"/>
+        </columns>
+        <note>Таблица-связка many-to-many (film_id, genre_id) — составной PK.</note>
+      </table>
+
+      <table name="actors">
+        <columns>
+          <column name="id" type="BIGINT" pk="true" generated="true"/>
+          <column name="full_name" type="VARCHAR"/>
+          <column name="birth_year" type="INT"/>
+          <column name="country" type="VARCHAR"/>
+          <column name="photo_url" type="TEXT"/>
+        </columns>
+      </table>
+
+      <table name="actor_films">
+        <columns>
+          <column name="actor_id" type="BIGINT" pk="true" fk="actors.id"/>
+          <column name="film_id" type="BIGINT" pk="true" fk="films.id"/>
+        </columns>
+        <note>Связь актеров и фильмов many-to-many.</note>
+      </table>
+    </tables>
+  </database>
+
+  <api>
+    <baseUrl>http://localhost:8080</baseUrl>
+
+    <endpoint method="GET" path="/api/films">
+      <description>Получить список фильмов.</description>
+    </endpoint>
+    <endpoint method="POST" path="/api/films">
+      <description>Добавить фильм.</description>
+      <requestBody>{"title":"...", "releaseYear":2010, "runtimeMin":120, "description":"..."}
+      </requestBody>
+    </endpoint>
+    <endpoint method="PUT" path="/api/films/{id}">
+      <description>Редактировать фильм.</description>
+    </endpoint>
+    <endpoint method="DELETE" path="/api/films/{id}">
+      <description>Удалить фильм.</description>
+    </endpoint>
+
+    <endpoint method="GET" path="/api/genres">
+      <description>Получить список жанров.</description>
+    </endpoint>
+
+    <endpoint method="GET" path="/api/actors">
+      <description>Получить список актёров.</description>
+    </endpoint>
+    <endpoint method="POST" path="/api/actors">
+      <description>Добавить актёра.</description>
+      <requestBody>{"fullName":"...", "birthYear":1990, "country":"...", "photoUrl":"...",
+        "filmIds":[1,2]}
+      </requestBody>
+    </endpoint>
+    <endpoint method="PUT" path="/api/actors/{id}">
+      <description>Редактировать актёра.</description>
+    </endpoint>
+    <endpoint method="DELETE" path="/api/actors/{id}">
+      <description>Удалить актёра.</description>
+    </endpoint>
+  </api>
+
+  <ui>
+    <pages>
+      <page path="/">Фильмы (index.html)</page>
+      <page path="/genres.html">Жанры</page>
+      <page path="/actors.html">Актёры</page>
+    </pages>
+    <note>UI работает через fetch() к REST API.</note>
+  </ui>
+
+  <run>
+    <steps>
+      <step>Запустить PostgreSQL, создать базу (например moviedb).</step>
+      <step>Настроить src/main/resources/application.properties (url, user, password).</step>
+      <step>Запустить Spring Boot приложение.</step>
+      <step>Открыть http://localhost:8080/</step>
+    </steps>
+  </run>
+</projectDocumentation>
